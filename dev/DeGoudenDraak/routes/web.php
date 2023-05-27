@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\DishType;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $dishes = DishType::all()->first();
+    return view('welcome', ['dishes' => $dishes]);
 });

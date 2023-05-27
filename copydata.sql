@@ -1,4 +1,5 @@
 -- Connect to the destination database
+DROP DATABASE IF EXISTS `dev_degoudendraak`;
 CREATE DATABASE IF NOT EXISTS `dev_degoudendraak`;
 USE dev_degoudendraak;
 
@@ -12,13 +13,9 @@ SELECT * FROM gouden_draak.menu;
 CREATE TEMPORARY TABLE temp_sales
 SELECT * FROM gouden_draak.sales;
 
-
-
 -- Insert the data into the destination table
 
 -- Users
-DROP TABLE IF EXISTS `users`;
-DROP TABLE IF EXISTS `roles`;
 CREATE TABLE roles (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	name VARCHAR(50) UNIQUE
@@ -32,10 +29,6 @@ CREATE TABLE users (
 );
 
 -- Dishes
-DROP TABLE IF EXISTS `dish_in_order`;
-DROP TABLE IF EXISTS `dishes`;
-DROP TABLE IF EXISTS `dish_types`;
-
 CREATE TABLE dish_types (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) UNIQUE
@@ -54,17 +47,11 @@ CREATE TABLE dishes (
 
 -- Orders
 DROP TABLE IF EXISTS `orders`;
-DROP TABLE IF EXISTS `customers`;
-CREATE TABLE customers(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    table_number INT
-);
 
 CREATE TABLE orders (
     id INT PRIMARY KEY AUTO_INCREMENT,
     paid_at DATETIME NULL,
-    customer INT NULL,
-    FOREIGN KEY (customer) REFERENCES customers (id) ON DELETE CASCADE
+    table_number INT
 );
 
 CREATE TABLE dish_in_order (
@@ -74,6 +61,45 @@ CREATE TABLE dish_in_order (
     FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE,
     amount INT,
     remark VARCHAR(999) NULL
+);
+
+-- Specialties
+CREATE TABLE specialty_addition (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    description VARCHAR(999) NULL,
+    price DOUBLE
+);
+
+CREATE TABLE specialties (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50),
+    price DOUBLE,
+    description VARCHAR(999) NULL,
+    addition_id INT,
+    FOREIGN KEY (addition_id) REFERENCES specialty_addition (id) ON DELETE CASCADE 
+);
+
+CREATE TABLE dish_in_specialty (
+    dish_id INT,
+    FOREIGN KEY (dish_id) REFERENCES dishes (id) ON DELETE CASCADE,
+    specialty_id INT,
+    FOREIGN KEY (specialty_id) REFERENCES specialties (id) ON DELETE CASCADE
+);
+
+CREATE TABLE specialty_in_order (
+    specialty_id INT,
+    FOREIGN KEY (specialty_id) REFERENCES specialties (id) ON DELETE CASCADE,
+    order_id INT,
+    FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE,
+    amount INT,
+    remark VARCHAR(999) NULL
+);
+
+-- News
+CREATE TABLE news_articles (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	body VARCHAR(999),
+    title VARCHAR(50)
 );
 
 -- INSERTING DATA
@@ -97,7 +123,7 @@ INNER JOIN dish_types AS type
 ON type.name = temp.soortgerecht;
 
 -- Orders
-INSERT INTO orders (id, paid_at, customer)
+INSERT INTO orders (id, paid_at, table_number)
 SELECT id, saleDate, null FROM temp_sales;
 
 INSERT INTO dish_in_order (dish_id, order_id, amount, remark)
