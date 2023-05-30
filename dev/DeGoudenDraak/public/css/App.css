@@ -1,0 +1,27 @@
+h1{
+    font-family:'chinese_takeawayregular';
+    font-weight:bold;
+}
+
+h2{
+    font-family:'chinese_takeawayregular';
+    font-weight:bold;
+}
+
+body{
+    background-color: #FF5A51;
+    color: #FFFF00;
+}
+
+.textfield{
+    background-color: #FFFFFF;
+    color: #000000;
+}
+
+@font-face {
+    font-family: 'chinese_takeawayregular';
+    src: url('fonts/chinesetakeaway-webfont.woff2') format('woff2'),
+         url('fonts/chinesetakeaway-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}

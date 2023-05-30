@@ -37,12 +37,12 @@ CREATE TABLE dish_types (
 CREATE TABLE dishes (
     id INT PRIMARY KEY AUTO_INCREMENT,
     dish_number INT,
-    name VARCHAR(50),
+    name VARCHAR(100),
     price DOUBLE,
     description VARCHAR(999) NULL,
     addition VARCHAR(50) NULL,
-    type INT,
-    FOREIGN KEY (type) REFERENCES dish_types (id) ON DELETE CASCADE
+    dish_type_id INT,
+    FOREIGN KEY (dish_type_id) REFERENCES dish_types (id) ON DELETE CASCADE
 );
 
 -- Orders
@@ -117,7 +117,7 @@ ON temp.isAdmin = role.id;
 INSERT INTO dish_types (name)
 SELECT DISTINCT soortgerecht FROM temp_dishes;
 
-INSERT INTO dishes (id, dish_number, name, price, description, addition, type)
+INSERT INTO dishes (id, dish_number, name, price, description, addition, dish_type_id)
 SELECT temp.id, menunummer, naam, ROUND(price, 1), beschrijving, menu_toevoeging, type.id FROM temp_dishes AS temp
 INNER JOIN dish_types AS type
 ON type.name = temp.soortgerecht;

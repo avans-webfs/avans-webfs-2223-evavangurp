@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\NavigationController;
 use App\Models\DishType;
+use App\Models\Specialty;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    $dishes = DishType::all()->first();
-    return view('welcome', ['dishes' => $dishes]);
-});
+Route::get('/', [NavigationController::class, 'homepage']);
+Route::get('menu', [NavigationController::class, 'menu']);
+Route::get('contact', [NavigationController::class, 'contact']);
+Route::get('news', [NavigationController::class, 'news']);
+Route::get('specialties', [NavigationController::class, 'specialties']);
