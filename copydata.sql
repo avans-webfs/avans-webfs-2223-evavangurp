@@ -18,12 +18,17 @@ SELECT * FROM gouden_draak.sales;
 -- Users
 CREATE TABLE roles (
 	id INT PRIMARY KEY AUTO_INCREMENT,
-	name VARCHAR(50) UNIQUE
+	name VARCHAR(255) UNIQUE
 );
 CREATE TABLE users (
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(50) UNIQUE,
-    password VARCHAR(50),
+    name VARCHAR(255) UNIQUE,
+    email VARCHAR(50) UNIQUE,
+    email_verified_at DATETIME NULL,
+    password VARCHAR(255),
+    remember_token VARCHAR(100),
+    created_at DATETIME,
+    updated_at DATETIME,
     role INT,
     FOREIGN KEY (role) REFERENCES roles (id) ON DELETE CASCADE
 );
@@ -41,6 +46,8 @@ CREATE TABLE dishes (
     price DOUBLE,
     description VARCHAR(999) NULL,
     addition VARCHAR(50) NULL,
+    created_at DATETIME,
+    updated_at DATETIME,
     dish_type_id INT,
     FOREIGN KEY (dish_type_id) REFERENCES dish_types (id) ON DELETE CASCADE
 );
@@ -51,7 +58,9 @@ DROP TABLE IF EXISTS `orders`;
 CREATE TABLE orders (
     id INT PRIMARY KEY AUTO_INCREMENT,
     paid_at DATETIME NULL,
-    table_number INT
+    table_number INT,
+    created_at DATETIME,
+    updated_at DATETIME
 );
 
 CREATE TABLE dish_in_order (
@@ -75,6 +84,8 @@ CREATE TABLE specialties (
     name VARCHAR(50),
     price DOUBLE,
     description VARCHAR(999) NULL,
+    created_at DATETIME,
+    updated_at DATETIME,
     addition_id INT,
     FOREIGN KEY (addition_id) REFERENCES specialty_addition (id) ON DELETE CASCADE 
 );
@@ -99,16 +110,18 @@ CREATE TABLE specialty_in_order (
 CREATE TABLE news_articles (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	body VARCHAR(999),
-    title VARCHAR(50)
+    title VARCHAR(50),
+    created_at DATETIME,
+    updated_at DATETIME
 );
 
 -- INSERTING DATA
 
 -- Users
 INSERT INTO roles (id, name)
-VALUES ("1", "admin");
+VALUES ("1", "admin"), ("2", "register"), ("3", "customer");
 
-INSERT INTO users (id, username, password, role)
+INSERT INTO users (id, name, password, role)
 SELECT temp.id, "admin", wachtwoord, role.id FROM temp_users AS temp
 INNER JOIN roles AS role
 ON temp.isAdmin = role.id;

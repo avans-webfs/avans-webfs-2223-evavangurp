@@ -1,8 +1,7 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NavigationController;
-use App\Models\DishType;
-use App\Models\Specialty;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,7 +16,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [NavigationController::class, 'homepage']);
-Route::get('menu', [NavigationController::class, 'menu']);
-Route::get('contact', [NavigationController::class, 'contact']);
-Route::get('news', [NavigationController::class, 'news']);
-Route::get('specialties', [NavigationController::class, 'specialties']);
+Route::get('/menu', [NavigationController::class, 'menu']);
+Route::get('/contact', [NavigationController::class, 'contact']);
+Route::get('/news', [NavigationController::class, 'news']);
+Route::get('/specialties', [NavigationController::class, 'specialties']);
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
