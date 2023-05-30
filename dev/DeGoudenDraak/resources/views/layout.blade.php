@@ -34,7 +34,7 @@
                             <a class="btn btn-outline-warning me-2 {{ (request()->segment(1) == 'menu') ? 'font-weight-bold' : '' }}" href="/menu">Menukaart</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-outline-warning me-2 {{ (request()->segment(1) == 'menu') ? 'font-weight-bold' : '' }}" href="/menu">Aanbiedingen</a>
+                            <a class="btn btn-outline-warning me-2 {{ (request()->segment(1) == 'specialties') ? 'font-weight-bold' : '' }}" href="/specialties">Aanbiedingen</a>
                         </li>
                         <li class="nav-item">
                             <a class="btn btn-outline-warning me-2 {{ (request()->segment(1) == 'news') ? 'font-weight-bold' : '' }}" href="/news">Nieuws</a>

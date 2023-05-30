@@ -18,3 +18,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [NavigationController::class, 'homepage']);
 Route::get('menu', [NavigationController::class, 'menu']);
+Route::get('contact', [NavigationController::class, 'contact']);
+Route::get('news', [NavigationController::class, 'news']);
+Route::get('specialties', [NavigationController::class, 'specialties']);
