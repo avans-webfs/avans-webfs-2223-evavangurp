@@ -1,5 +1,5 @@
-@extends('layout')
-@section('content')
+@extends('layouts.guest-layout')
+@section('body')
 <div class="container">
     <br>
     <h1> Contact </h1>

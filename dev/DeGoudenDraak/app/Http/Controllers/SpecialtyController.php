@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\Specialty;
+use App\Models\Dish;
+use App\Models\SpecialtyAddition;
 
 class SpecialtyController extends Controller
 {
@@ -11,7 +15,7 @@ class SpecialtyController extends Controller
      */
     public function index()
     {
-        //
+        return view('specialties/index', ['specialties' => Specialty::all()->sortBy('updated_at')]);
     }
 
     /**
@@ -19,7 +23,8 @@ class SpecialtyController extends Controller
      */
     public function create()
     {
-        //
+        return view('specialties/create', ['additions' => SpecialtyAddition::all()->sortBy('updated_at'),
+    'dishes' => Dish::all()->sortBy('id')]);
     }
 
     /**
@@ -27,15 +32,28 @@ class SpecialtyController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'name' => 'required|max:255',
+            'price' => 'required|decimal:0,2',
+            'description' => '|max:999'
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        $specialty = new Specialty([
+            'name' => $request->get('name'),
+            'price' => $request->get('price'),
+            'description' => $request->get('description'),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+            'addition_id' => $request->get('addition'),
+        ]);
+        $specialty->save();
+        if ($request->get('dishes') != null) {
+            foreach ($request->get('dishes') as $dishId) {
+                $specialty->dishes()->save(Dish::find($dishId));
+            }
+        }
+        $specialty->save();
+        return redirect('/admin/specialties')->with('success', 'Specialiteit opgeslagen.');
     }
 
     /**
@@ -43,7 +61,9 @@ class SpecialtyController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('specialties/edit', ['specialty' => Specialty::findOrFail($id),
+        'dishes' => Dish::all()->sortBy('id'),
+        'additions' => SpecialtyAddition::all()->sortBy('id')]);
     }
 
     /**
@@ -51,7 +71,28 @@ class SpecialtyController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:255',
+            'price' => 'required|decimal:0,2',
+            'description' => '|max:999'
+        ]);
+        $specialty = Specialty::findOrFail($id);
+        $specialty->name = $request->get('name');
+        $specialty->price = $request->get('price');
+        $specialty->description = $request->get('description');
+        $specialty->updated_at = Carbon::now();
+        $specialty->addition_id = $request->get('addition');
+        $specialty->dishes()->detach();
+        $specialty->save();
+
+        if ($request->get('dishes') != null) {
+            foreach ($request->get('dishes') as $dishId) {
+                $specialty->dishes()->save(Dish::find($dishId));
+            }
+        }
+        
+        $specialty->save();
+        return redirect('/admin/specialties')->with('success', 'Specialiteit opgeslagen.');
     }
 
     /**
@@ -59,6 +100,7 @@ class SpecialtyController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Specialty::findOrFail($id)->delete();
+        return redirect('/admin/specialties')->with('success', 'Specialiteit verwijderd.');
     }
 }

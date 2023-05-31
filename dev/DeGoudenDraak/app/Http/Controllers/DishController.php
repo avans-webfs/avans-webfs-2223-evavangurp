@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\Dish;
+use App\Models\DishType;
 
 class DishController extends Controller
 {
@@ -19,7 +22,7 @@ class DishController extends Controller
      */
     public function create()
     {
-        //
+        return view('menu/create', ['types' => DishType::all()->sortBy('id')]);
     }
 
     /**
@@ -27,15 +30,25 @@ class DishController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'name' => 'required|max:255',
+            'price' => 'required|decimal:0,2',
+            'addition' => 'max:1',
+            'body' => 'max:999'
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        $dish = new Dish([
+            'name' => $request->get('name'),
+            'price' => $request->get('price'),
+            'addition' => $request->get('addition'),
+            'description' => $request->get('body'),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+            'dish_type_id' => $request->get('types')
+        ]);
+        $dish->save();
+
+        return redirect('/admin/menu')->with('success', 'Gerecht opgeslagen.');
     }
 
     /**
@@ -43,7 +56,8 @@ class DishController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('menu/edit', ['dish' => Dish::findOrFail($id),
+        'types' => DishType::all()->sortBy('id')]);
     }
 
     /**
@@ -51,7 +65,24 @@ class DishController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        
+        $request->validate([
+            'name' => 'required|max:255',
+            'price' => 'required|decimal:0,2',
+            'addition' => 'max:1',
+            'body' => 'max:999'
+        ]);
+
+        $dish = Dish::findOrFail($id);
+        $dish->name = $request->get('name');
+        $dish->price = $request->get('price');
+        $dish->addition = $request->get('addition');
+        $dish->description = $request->get('body');
+        $dish->updated_at = Carbon::now();
+        $dish->dish_type_id = $request->get('types');
+        $dish->save();
+        
+        return redirect('/admin/menu')->with('success', 'Gerecht opgeslagen.');
     }
 
     /**
@@ -59,6 +90,7 @@ class DishController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Dish::findOrFail($id)->delete();
+        return redirect('/admin/menu')->with('success', 'Gerecht verwijderd.');
     }
 }

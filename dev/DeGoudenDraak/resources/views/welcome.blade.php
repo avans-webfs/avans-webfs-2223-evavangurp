@@ -1,5 +1,5 @@
-@extends('layout')
-@section('content')
+@extends('layouts.guest-layout')
+@section('page')
 <div class="container">
     <div class="row">
         <h2 class="col d-flex justify-content-center">Chinees Indische Specialiteiten</h2>

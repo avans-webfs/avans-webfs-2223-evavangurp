@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Order extends Model
 {
     use HasFactory;
+    protected $guarded = ['$id'];
 
     public function dishes(): BelongsToMany
     {

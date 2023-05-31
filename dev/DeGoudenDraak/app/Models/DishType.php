@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class DishType extends Model
 {
     use HasFactory;
+    protected $guarded = ['$id'];
 
     public function dishes(): HasMany
     {

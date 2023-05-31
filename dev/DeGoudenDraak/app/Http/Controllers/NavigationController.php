@@ -15,7 +15,7 @@ class NavigationController extends Controller
     }
 
     public function menu(){
-        return view('menu', ['types' => DishType::all()->sortBy('id')]);
+        return view('menu/menu', ['types' => DishType::all()->sortBy('id')]);
     }
 
     public function contact(){
@@ -23,10 +23,10 @@ class NavigationController extends Controller
     }
 
     public function news(){
-        return view('news', ['articles' => NewsArticle::all()->sortBy('id')]);
+        return view('news/news', ['articles' => NewsArticle::all()->sortBy('id')]);
     }
 
     public function specialties(){
-        return view('specialties', ['specialties' => Specialty::all()->sortBy('id')]);
+        return view('specialties/specialties', ['specialties' => Specialty::all()->sortBy('id')]);
     }
 }

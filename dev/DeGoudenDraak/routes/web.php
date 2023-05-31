@@ -6,6 +6,7 @@ use App\Http\Controllers\DishController;
 use App\Http\Controllers\SpecialtyController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ContactController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,7 +36,7 @@ Route::middleware('role:admin')->group(function() {
     Route::resource('/admin/menu', DishController::class);
     Route::resource('/admin/specialties', SpecialtyController::class);
     Route::resource('/admin/news', NewsController::class);
-    Route::resource('/admin/order', OrderController::class);
+    Route::resource('/admin/orders', OrderController::class);
 });
 
 require __DIR__.'/auth.php';

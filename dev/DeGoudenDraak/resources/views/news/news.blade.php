@@ -1,8 +1,8 @@
-@extends('layout')
-@section('content')
+@extends('layouts.guest-layout')
+@section('page')
 <div class="container">
     <br>
-    <h1> Nieusberichten </h1>
+    <h1> Nieuwsberichten </h1>
     <article class="textfield">
         @forelse($articles as $article)
         <div class="row">

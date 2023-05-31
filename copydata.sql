@@ -41,7 +41,6 @@ CREATE TABLE dish_types (
 
 CREATE TABLE dishes (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    dish_number INT,
     name VARCHAR(100),
     price DOUBLE,
     description VARCHAR(999) NULL,
@@ -58,6 +57,7 @@ DROP TABLE IF EXISTS `orders`;
 CREATE TABLE orders (
     id INT PRIMARY KEY AUTO_INCREMENT,
     paid_at DATETIME NULL,
+	price DOUBLE,
     table_number INT,
     created_at DATETIME,
     updated_at DATETIME
@@ -73,7 +73,7 @@ CREATE TABLE dish_in_order (
 );
 
 -- Specialties
-CREATE TABLE specialty_addition (
+CREATE TABLE specialty_additions (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     description VARCHAR(999) NULL,
     price DOUBLE
@@ -87,7 +87,7 @@ CREATE TABLE specialties (
     created_at DATETIME,
     updated_at DATETIME,
     addition_id INT,
-    FOREIGN KEY (addition_id) REFERENCES specialty_addition (id) ON DELETE CASCADE 
+    FOREIGN KEY (addition_id) REFERENCES specialty_additions (id) ON DELETE CASCADE 
 );
 
 CREATE TABLE dish_in_specialty (
@@ -121,8 +121,8 @@ CREATE TABLE news_articles (
 INSERT INTO roles (id, name)
 VALUES ("1", "admin"), ("2", "register"), ("3", "customer");
 
-INSERT INTO users (id, name, password, role)
-SELECT temp.id, "admin", wachtwoord, role.id FROM temp_users AS temp
+INSERT INTO users (id, name, email, password, role)
+SELECT temp.id, "admin", "admin@admin.nl", wachtwoord, role.id FROM temp_users AS temp
 INNER JOIN roles AS role
 ON temp.isAdmin = role.id;
 
@@ -130,14 +130,15 @@ ON temp.isAdmin = role.id;
 INSERT INTO dish_types (name)
 SELECT DISTINCT soortgerecht FROM temp_dishes;
 
-INSERT INTO dishes (id, dish_number, name, price, description, addition, dish_type_id)
-SELECT temp.id, menunummer, naam, ROUND(price, 1), beschrijving, menu_toevoeging, type.id FROM temp_dishes AS temp
+INSERT INTO dishes (id, name, price, description, addition, dish_type_id)
+SELECT temp.id, naam, ROUND(price, 1), beschrijving, menu_toevoeging, type.id FROM temp_dishes AS temp
 INNER JOIN dish_types AS type
 ON type.name = temp.soortgerecht;
 
 -- Orders
-INSERT INTO orders (id, paid_at, table_number)
-SELECT id, saleDate, null FROM temp_sales;
+INSERT INTO orders (id, paid_at, table_number, price)
+SELECT temp_sales.id, saleDate, null, ROUND(amount * temp_dishes.price, 2) FROM temp_sales
+INNER JOIN temp_dishes ON temp_sales.itemId = temp_dishes.id;
 
 INSERT INTO dish_in_order (dish_id, order_id, amount, remark)
 SELECT itemId, id, amount, null FROM temp_sales;

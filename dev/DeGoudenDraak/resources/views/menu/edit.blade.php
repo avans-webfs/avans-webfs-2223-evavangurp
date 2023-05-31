@@ -1,55 +1,54 @@
-@extends('layout')
+@extends('layouts.layout')
 
-@section('content')
+@section('body')
 <div class="row">
-    <div class="col-sm-12 container">
-        <h1 class="display-3">Gerechten</h1>
-        <div class="justify-content-between d-lg-flex mb-3">
-            <a href="/admin/menu/create" class="btn btn-primary" dusk="create-event-button">Creeër nieuw gerecht</a>
-            <a class="btn btn-secondary" href="/menu">Terug</a>
-        </div>
-        @if(session()->get('success'))
-            <div class="alert alert-success">
-                {{ session()->get('success') }}
+    <div class="col-sm-8 offset-sm-2">
+        <h1 class="display-3">Gerecht aanpassen
+        <a href="/admin/menu" class="btn btn-primary">Ga terug</a></h1>
+
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
+            <br />
         @endif
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <td>Artikelnummer</td>
-                    <td>Toevoeging</td>
-                    <td>Naam</td>
-                    <td>Prijs</td>
-                    <td>Beschrijving</td>
-                    <td>Type</td>
-                    <td>Toegevoegd</td>
-                    <td colspan = 2>Actions</td>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($dishes as $dish)
-                    <tr>
-                        <td>{{$dish->dish_number}}</td>
-                        <td>{{$dish->addition}} </td>
-                        <td>{{$dish->name}}</td>
-                        <td>€{{number_format($dish->price, 2, ',', ' ')}}</td>
-                        <td>{{$dish->description}}</td>
-                        <td>{{$dish->type}}</td>
-                        <td>{{$dish->created_at}}</td>
-                        <td>
-                            <a href="admin/menu/{{$dish->id}}/edit" class="btn btn-primary" dusk="edit-event-button">Aanpassen</a>
-                        </td>
-                        <td>
-                            <form action="admin/menu/{{$dish->id}}" method="post">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger" type="submit" dusk="remove-event-button">Verwijderen</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    <div>
+        <form method="post" action="/admin/menu/{{$dish->id}}">
+            @method('PATCH')
+            @csrf
+            <div class="form-group">
+                <label for="name">*Naam:</label>
+                <input type="text" class="form-control" name="name" value="{{$dish->name}}" id="name"/>
+            </div>
+
+            <div class="form-group">
+                <label for="price">*Prijs:</label>
+                <input type="number" step="0.01" class="form-control" name="price" value="{{ $dish->price }}" id="price"/>
+            </div>
+
+            <div class="form-group">
+                <label for="body">Beschrijving:</label>
+                <textarea rows="5" class="form-control" name="body" id="body">{{$dish->description}}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="addition">Toevoeging:</label>
+                <input type="text" class="form-control" name="addition" value="{{ $dish->addition }}" id="addition"/>
+            </div>
+
+            <label>*Groepen:</label>
+            @foreach($types as $type)
+            <div class="form-check">
+                <input type="radio" class="form-check-input" name="types" value="{{$type->id}}" id="{{$type->id}}" {{$dish->dishType->id === $type->id ? 'checked' : ''}}/>
+                <label for="{{$type->id}}" class="form-check-label">{{$type->name}}</label>
+            </div>
+            @endforeach
+
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+    </div>
 </div>
 @endsection

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\NewsArticle;
 
 class NewsController extends Controller
 {
@@ -11,7 +13,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        //
+        return view('news/index', ['articles' => NewsArticle::all()->sortBy('updated_at')]);
     }
 
     /**
@@ -19,7 +21,7 @@ class NewsController extends Controller
      */
     public function create()
     {
-        //
+        return view('news/create');
     }
 
     /**
@@ -27,15 +29,20 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $request->validate([
+            'title' => 'required|max:255',
+            'body' => 'required|max:999'
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        $article = new NewsArticle([
+            'title' => $request->get('title'),
+            'body' => $request->get('body'),
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+        $article->save();
+
+        return redirect('/admin/news')->with('success', 'Artikel opgeslagen.');
     }
 
     /**
@@ -43,7 +50,7 @@ class NewsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('news/edit', ['article' => NewsArticle::findOrFail($id)]);
     }
 
     /**
@@ -51,7 +58,17 @@ class NewsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'title' => 'required|max:255',
+            'body' => 'required|max:999'
+        ]);
+        $article = NewsArticle::findOrFail($id);
+        $article->title = $request->get('title');
+        $article->body = $request->get('body');
+        $article->updated_at = Carbon::now();
+        $article->save();
+
+        return redirect('/admin/news')->with('success', 'Artikel opgeslagen.');
     }
 
     /**
@@ -59,6 +76,7 @@ class NewsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        NewsArticle::findOrFail($id)->delete();
+        return redirect('/admin/news')->with('success', 'Artikel verwijderd.');
     }
 }

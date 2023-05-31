@@ -15,6 +15,7 @@
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        @yield('head')
     </head>
     <body>
         @if(Auth::user() == null)
@@ -66,7 +67,7 @@
                             <a class="btn btn-outline-warning me-2 {{ (request()->segment(1) == 'menu') ? 'font-weight-bold' : '' }}" href="/admin/menu">Menukaart</a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-outline-warning me-2 {{ (request()->segment(1) == 'specialties') ? 'font-weight-bold' : '' }}" href="/admin/specialties">Aanbiedingen</a>
+                            <a class="btn btn-outline-warning me-2 {{ (request()->segment(1) == 'specialties') ? 'font-weight-bold' : '' }}" href="/admin/specialties">Specialiteiten</a>
                         </li>
                         <li class="nav-item">
                             <a class="btn btn-outline-warning me-2 {{ (request()->segment(1) == 'news') ? 'font-weight-bold' : '' }}" href="/admin/news">Nieuws</a>
@@ -105,9 +106,8 @@
             </div>
         </nav>
         @endif
-
         <div class="container">
-        @yield('content')
+            @yield('body')
         </div>
     </body>
 </html>
