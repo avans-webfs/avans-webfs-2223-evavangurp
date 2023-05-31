@@ -7,7 +7,6 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <!-- boostrap required voor slider -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous" defer></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
 
@@ -18,6 +17,7 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     </head>
     <body>
+        @if(Auth::user() == null)
         <nav class="navbar navbar-expand-xl navbar-light bg-danger">
             <div class="container">
                 <a class="navbar-brand text-dark me-2" href="/">
@@ -49,6 +49,63 @@
                 </div>
             </div>
         </nav>
+        @else
+        <nav class="navbar navbar-expand-xl navbar-light bg-danger">
+            <div class="container">
+                <a class="navbar-brand text-dark me-2" href="/">
+                    <img src="/img/dragon-small.png" alt="Gouden Draak logo" aria-label="Logo van de Gouden Draak" id="logo">
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="main-navbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="btn btn-outline-warning me-2 {{ (request()->segment(1) == 'menu') ? 'font-weight-bold' : '' }}" href="/admin/menu">Menukaart</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-warning me-2 {{ (request()->segment(1) == 'specialties') ? 'font-weight-bold' : '' }}" href="/admin/specialties">Aanbiedingen</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-warning me-2 {{ (request()->segment(1) == 'news') ? 'font-weight-bold' : '' }}" href="/admin/news">Nieuws</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-warning me-2 {{ (request()->segment(1) == 'contact') ? 'font-weight-bold' : '' }}" href="/admin/orders">Bestellingen</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-warning {{ (request()->segment(1) == 'profile') ? 'font-weight-bold' : '' }}"
+                           id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
+                           aria-expanded="false">
+                            {{ Auth::user()->name }}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li>
+                                <a href="{{ route('profile.edit') }}" class="dropdown-item">
+                                    Profiel
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <a href="{{route('logout')}}" class="dropdown-item"
+                                       onclick="event.preventDefault(); this.closest('form').submit();">
+                                        Uitloggen
+                                    </a>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        @endif
+
         <div class="container">
         @yield('content')
         </div>
