@@ -1,5 +1,5 @@
-@extends('layout')
-@section('content')
+@extends('layouts.guest-layout')
+@section('page')
 <br>
 <h1>Aanbiedingen</h1>
 <article class="textfield">

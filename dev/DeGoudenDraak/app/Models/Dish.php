@@ -11,6 +11,8 @@ class Dish extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['$id'];
+
     public function specialties(): BelongsToMany
     {
         return $this->belongsToMany(Specialty::class, 'dish_in_specialty');

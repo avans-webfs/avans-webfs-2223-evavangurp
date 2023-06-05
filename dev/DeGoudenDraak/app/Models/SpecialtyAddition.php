@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class SpecialtyAddition extends Model
 {
     use HasFactory;
+    protected $guarded = ['$id'];
 
     public function specialties(): HasMany
     {

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Specialty extends Model
 {
     use HasFactory;
+    protected $guarded = ['$id'];
     
     public function dishes(): BelongsToMany
     {
