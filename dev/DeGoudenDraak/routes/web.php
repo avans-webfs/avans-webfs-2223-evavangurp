@@ -7,6 +7,7 @@ use App\Http\Controllers\SpecialtyController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,6 +38,7 @@ Route::middleware('role:admin')->group(function() {
     Route::resource('/admin/specialties', SpecialtyController::class);
     Route::resource('/admin/news', NewsController::class);
     Route::resource('/admin/orders', OrderController::class);
+    Route::resource('/admin/users', UserController::class);
 });
 
 require __DIR__.'/auth.php';

@@ -29,8 +29,8 @@ CREATE TABLE users (
     remember_token VARCHAR(100),
     created_at DATETIME,
     updated_at DATETIME,
-    role INT,
-    FOREIGN KEY (role) REFERENCES roles (id) ON DELETE CASCADE
+    role_id INT,
+    FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE
 );
 
 -- Dishes
@@ -121,7 +121,7 @@ CREATE TABLE news_articles (
 INSERT INTO roles (id, name)
 VALUES ("1", "admin"), ("2", "register"), ("3", "customer");
 
-INSERT INTO users (id, name, email, password, role)
+INSERT INTO users (id, name, email, password, role_id)
 SELECT temp.id, "admin", "admin@admin.nl", wachtwoord, role.id FROM temp_users AS temp
 INNER JOIN roles AS role
 ON temp.isAdmin = role.id;

@@ -18,8 +18,7 @@ class Role
         if (request()->user() === null) {
             abort(403);
         }
-        $roleId = strtolower( request()->user()->role );
-        $role = \App\Models\Role::find($roleId);
+        $role = request()->user()->role;
         $allowed_roles = array_slice(func_get_args(), 0);
 
         if( in_array($role->name, $allowed_roles) ) {
