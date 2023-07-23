@@ -75,6 +75,9 @@
                         <li class="nav-item">
                             <a class="btn btn-outline-warning me-2 {{ (request()->segment(1) == 'contact') ? 'font-weight-bold' : '' }}" href="/admin/orders">Bestellingen</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="btn btn-outline-warning me-2 {{ (request()->segment(1) == 'register') ? 'font-weight-bold' : '' }}" href="/register">Nieuw account registreren</a>
+                        </li>
                         <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-warning {{ (request()->segment(1) == 'profile') ? 'font-weight-bold' : '' }}"
                            id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
