@@ -119,10 +119,10 @@ CREATE TABLE news_articles (
 
 -- Users
 INSERT INTO roles (id, name)
-VALUES ("1", "admin"), ("2", "register"), ("3", "customer");
+VALUES ("1", "Admin"), ("2", "Register"), ("3", "Customer");
 
 INSERT INTO users (id, name, email, password, role_id)
-SELECT temp.id, "admin", "admin@admin.nl", wachtwoord, role.id FROM temp_users AS temp
+SELECT temp.id, "Admin", "admin@admin.nl", "$2y$10$jxWyT4ORcQevaFK8oYPyKuFEdQP8KdnKzc4gaoh7NTxxbjut/Zy0e", role.id FROM temp_users AS temp
 INNER JOIN roles AS role
 ON temp.isAdmin = role.id;
 
