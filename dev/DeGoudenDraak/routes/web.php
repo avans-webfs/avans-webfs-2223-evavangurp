@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NavigationController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DishController;
 use App\Http\Controllers\SpecialtyController;
 use App\Http\Controllers\NewsController;
@@ -39,6 +40,17 @@ Route::middleware('role:admin')->group(function() {
     Route::resource('/admin/news', NewsController::class);
     Route::resource('/admin/orders', OrderController::class);
     Route::resource('/admin/users', UserController::class);
+});
+
+Route::middleware('role:customer')->group(function() {
+    Route::get('/customer/index', [CustomerController::class, 'index'])->name('customer.index');
+    Route::post('/customer/index', [CustomerController::class, 'createOrder']);
+    Route::get('/customer/order/{id}', [CustomerController::class, 'order'])->name('customer.order');
+    Route::patch('/customer/order/{orderId}/{dishId}', [CustomerController::class, 'addToOrder'])->name('customer.addToOrder');
+});
+
+Route::middleware('role:register')->group(function() {
+    Route::get('/register/index', [CustomerController::class, 'index'])->name('register.index');
 });
 
 require __DIR__.'/auth.php';

@@ -20,7 +20,7 @@ class Dish extends Model
 
     public function orders(): BelongsToMany
     {
-        return $this->belongsToMany(Order::class, 'dish_in_order');
+        return $this->belongsToMany(Order::class, 'dish_in_order', 'dish_id', 'order_id');
     }
 
     public function dishType(): BelongsTo
